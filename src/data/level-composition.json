@@ -1,0 +1,89 @@
+{
+	"1": {
+		"totalFlags": 20,
+		"unvisitedCountries": [
+			14,
+			20
+		],
+		"totalRounds": 20,
+		"scoreMultiplier": 1
+	},
+	"2": {
+		"totalFlags": 16,
+		"unvisitedCountries": [
+			8,
+			12
+		],
+		"totalRounds": 14,
+		"scoreMultiplier": 1.2
+	},
+	"3": {
+		"totalFlags": 24,
+		"unvisitedCountries": [
+			8,
+			18
+		],
+		"totalRounds": 19,
+		"scoreMultiplier": 1.5
+	},
+	"4": {
+		"totalFlags": 22,
+		"unvisitedCountries": [
+			7,
+			15
+		],
+		"totalRounds": 37,
+		"scoreMultiplier": 1.8
+	},
+	"5": {
+		"totalFlags": 8,
+		"unvisitedCountries": [
+			3,
+			7
+		],
+		"totalRounds": 28,
+		"scoreMultiplier": 2.2
+	},
+	"6": {
+		"totalFlags": 11,
+		"unvisitedCountries": [
+			4,
+			7
+		],
+		"totalRounds": 22,
+		"scoreMultiplier": 2.7
+	},
+	"7": {
+		"totalFlags": 20,
+		"unvisitedCountries": [
+			3,
+			8
+		],
+		"totalRounds": 34,
+		"scoreMultiplier": 3.3
+	},
+	"8": {
+		"totalFlags": 17,
+		"unvisitedCountries": [
+			2,
+			5
+		],
+		"totalRounds": 25,
+		"scoreMultiplier": 3.9
+	},
+	"9": {
+		"totalFlags": 12,
+		"unvisitedCountries": [
+			1,
+			3
+		],
+		"totalRounds": 33,
+		"scoreMultiplier": 4.5
+	},
+	"10": {
+		"totalFlags": 16,
+		"unvisitedCountries": 1,
+		"totalRounds": 14,
+		"scoreMultiplier": 5.5
+	}
+}

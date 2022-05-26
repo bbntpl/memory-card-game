@@ -1,0 +1,7 @@
+.header {
+	height: max-content;
+	width: 100%;
+	padding: 10px 4px;
+	background-color: aliceblue;
+	border-bottom: 2px solid pink;
+}

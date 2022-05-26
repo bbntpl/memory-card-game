@@ -1,0 +1,33 @@
+:root {
+	--color-tundora: #404040;
+	--filtered-color-boulder: invert(20%) sepia(0%) saturate(2596%) hue-rotate(199deg) brightness(103%) contrast(85%);
+}
+
+.logo{
+	display: grid;
+	width: min(100%, 300px);
+	font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI';
+	color: var(--color-boulder);
+	padding: 0 9px;
+	height: max-content;
+}
+
+.logo__upper {
+	display: grid;
+	grid-auto-flow: column;
+	justify-content: flex-start;
+	align-items: center;
+	font-size: clamp(.9rem, .8vw, 1.8rem);
+}
+
+.logo-image {
+	filter: var(--filtered-color-boulder);
+}
+
+.logo-slogan{
+	font-weight: 200;
+	width: 100%;
+	font-size: clamp(.8rem, .9vw, 2rem);
+	line-height: .8;
+	text-align: left;
+}

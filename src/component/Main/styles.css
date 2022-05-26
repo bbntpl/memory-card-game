@@ -1,0 +1,12 @@
+.main{
+	display: grid;
+	grid-template-columns: 1fr 3fr;
+	height: max-content;
+}
+
+@media screen and (max-width: 768px) {
+	.main{
+		display: grid;
+		grid-template-columns: auto;
+	}
+}

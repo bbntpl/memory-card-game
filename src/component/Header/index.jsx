@@ -1,10 +1,9 @@
 import Logo from '../Logo';
-
-export default function Header() {
+import './styles.css';
+export default function Header(props) {
 	return (
-		<div>
+		<div className='header'>
 			<Logo />
 		</div>
 	)
-
 }

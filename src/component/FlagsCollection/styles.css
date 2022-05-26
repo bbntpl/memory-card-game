@@ -1,0 +1,11 @@
+.spinner{
+	width: 140px;
+	height: 140px;
+}
+
+.flags-container {
+	display: grid;
+	grid-auto-flow: row;
+	gap: 2rem;
+	justify-content: center;
+}

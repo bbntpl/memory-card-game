@@ -1,0 +1,20 @@
+.country-card {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 10px;
+	width: 150px;
+	border: 2px solid transparent; 
+}
+
+.country-card:hover {
+	border: 2px solid lightcoral; 
+}
+
+.country-img-wrapper {
+	width: 200px;
+}
+
+.country-img {
+	width: auto;
+}
