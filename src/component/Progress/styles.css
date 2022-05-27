@@ -1,0 +1,38 @@
+.progress-bar{
+	position: relative;
+	width: min(100%, 300px);
+	height: 30px;
+	border-radius: 6px;
+	border: 1px solid black;
+	justify-self: center;
+}
+
+.progress-bar__background {
+	background: purple;
+	height: 100%;
+	top: 0;
+	left: 0;
+	z-index: 30;
+}
+
+.progress-bar__overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	background-color: rgba(0, 0, 0, .4);
+	color: aliceblue;
+	text-align: center;
+	padding: 6px 0;
+	font-size: 12px;
+	z-index: 50;
+	font-weight: 500;
+}
+
+@media screen and (max-width: 360px) {
+	.progress-bar {
+		border-radius: 0;
+		border: none;
+	}
+}

@@ -3,18 +3,41 @@
 	flex-direction: column;
 	justify-content: center;
 	gap: 10px;
-	width: 150px;
-	border: 2px solid transparent; 
+	width: 220px;
+	border: 5px solid transparent; 
+	font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI';
 }
-
+@media screen and (max-width: 765px) {
+	.country-card {
+		width: 150px;
+		gap: 8px;
+		border: 4px solid transparent; 
+		font-size: .9rem;
+	}
+	.country-card:hover {
+		border: 4px solid lightcoral;
+	}
+}
+@media screen and (max-width: 420px) {
+	.country-card {
+		width: 80px;
+		gap: 2px;
+		border: 2px solid transparent; 
+		font-size: .7rem;
+	}
+	.country-card:hover {
+		border: 2px solid lightcoral;
+	}
+}
 .country-card:hover {
-	border: 2px solid lightcoral; 
+	border: 5px solid lightcoral;
+	cursor: pointer; 
 }
 
 .country-img-wrapper {
-	width: 200px;
+	width: 100%;
 }
 
 .country-img {
-	width: auto;
+	width: 100%;
 }

@@ -1,18 +1,24 @@
 import { useEffect, useState } from 'react';
-import levelCompositionJson from '../../data/level-composition.json';
+import levelComposition from '../../data/level-composition.json';
 import Spinner from '../../assets/icons/Spinner-1s-200px.gif';
 import Flag from '../Flag';
 import './styles.css';
 
-function RenderFlags({ flags, getFlagImage }) {
-	return [...flags].forEach((flag, i) => {
+function RenderFlags(props) {
+	const { 
+		flags,
+		getFlagImage,
+		countryStatusToVisited
+	} = props
+	return [...flags].map((flag, i) => {
 		const { code } = flag;
 		const flagSvg = getFlagImage({ code });
-		return (<Flag
+		return <Flag
 			key={`${i}--code`}
 			flagImage={flagSvg}
 			flagData={flag}
-		/>)
+			countryStatusToVisited={countryStatusToVisited}
+		/>
 	});
 }
 
@@ -20,17 +26,15 @@ export default function FlagsCollection(props) {
 	const {
 		totalUniqueVisits,
 		countries,
-		visitedCountries
+		visitedCountries,
+		countryStatusToVisited
 	} = props;
 	const [currentLevel, setCurrentLevel] = useState(1);
-	const levelComposition = levelCompositionJson;
 	const [flagsForCurrentRound, setFlagsForCurrentRound] = useState([]);
 
 	function getFlagImage({ fileType = 'svg', code }) {
 		return `https://countryflagsapi.com/${fileType}/${code}`;
 	}
-
-
 
 	function randomNumber(min, max) {
 		return Math.floor(Math.random() * (max - min) + min);
@@ -49,7 +53,7 @@ export default function FlagsCollection(props) {
 		if (totalFlags - numOfUnvisitedCountries > numOfVisitedCountries) {
 			return totalFlags - numOfVisitedCountries;
 		} else {
-			return numOfVisitedCountries;
+			return numOfUnvisitedCountries;
 		}
 	}
 
@@ -73,13 +77,7 @@ export default function FlagsCollection(props) {
 		return newArray;
 	}
 
-	function shuffleArray(originalArr) {
-		const copiedArr = [...originalArr];
-		copiedArr.sort(() => 0.5 - Math.random());
-		console.log(copiedArr);
-		//
-		return copiedArr;
-	}
+	const shuffleArray = (originalArr) => [...originalArr].sort(() => 0.5 - Math.random());
 
 	// pick random flags from both (un)visited countries
 	// to be displayed for the user to choose on
@@ -111,38 +109,35 @@ export default function FlagsCollection(props) {
 			numOfItems: numOfVisitedCountries,
 			array: visitedCountries
 		});
+		console.log(minRandomNumber, maxRandomNumber, numOfCountries, numOfVisitedCountries, currentLevel);
 		return shuffleArray(countriesFlags.concat(visitedCountriesFlags));
 	}
-	console.log(flagsForCurrentRound);
 
 	useEffect(() => {
 		const flags = displayFlags();
 		setFlagsForCurrentRound(flags);
-		console.log(flags);
-	}, []);
+	}, [countries, visitedCountries]);
 
 	// In every round, compare the level composition to the
 	// accumulated rounds to confirm whether the memory 
 	// game must advance to the next level
 	useEffect(() => {
-		const round = totalUniqueVisits + 1;
-
+		const round = totalUniqueVisits.current + 1;
+		
 		// accumulated rounds from first level to the current level
 		const totalRoundsByCurrentLevel = (currentLevel) => {
 			return Object.values(levelComposition)
 				.reduce((accumulatedRounds, levelObj, level) => {
-					if (currentLevel <= level + 1) {
-						return accumulatedRounds + levelObj.totalRounds;
+					if (currentLevel >= level + 1) {
+						return accumulatedRounds += levelObj.totalRounds;
 					}
 					return accumulatedRounds;
 				}, 0);
 		}
-
-		if (totalRoundsByCurrentLevel(currentLevel) > round) {
+		if (totalRoundsByCurrentLevel(currentLevel) < round) {
 			setCurrentLevel(currentLevel => currentLevel + 1);
 		}
-	}, [totalUniqueVisits, levelComposition, currentLevel]);
-
+	}, [totalUniqueVisits.current]);
 	return (
 		<div className='flags-container'>
 			{
@@ -152,8 +147,9 @@ export default function FlagsCollection(props) {
 					<RenderFlags
 						flags={flagsForCurrentRound}
 						getFlagImage={getFlagImage}
+						countryStatusToVisited={countryStatusToVisited}
 					/> :
-					< img src={Spinner} alt='spinner' className='spinner' />
+					<img src={Spinner} alt='spinner' className='spinner' />
 			}
 		</div>
 	)

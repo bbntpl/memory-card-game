@@ -32,7 +32,7 @@
 			7,
 			15
 		],
-		"totalRounds": 37,
+		"totalRounds": 36,
 		"scoreMultiplier": 1.8
 	},
 	"5": {
@@ -54,7 +54,7 @@
 		"scoreMultiplier": 2.7
 	},
 	"7": {
-		"totalFlags": 20,
+		"totalFlags": 29,
 		"unvisitedCountries": [
 			3,
 			8

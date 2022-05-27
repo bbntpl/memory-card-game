@@ -14,11 +14,11 @@ function App() {
 	const [countries, setCountries] = useState([]);
 	const [visitedCountries, setVisitedCountries] = useState([])
 	const [score, setScore] = useState({
-		best: 0 || getItemFromLocal('bestScore'),
+		best: 0 || Number(getItemFromLocal('bestScore')),
 		current: 0
 	});
 	const [totalUniqueVisits, setTotalUniqueVisits] = useState({
-		prev: 0 || getItemFromLocal('prevTotalVisitedCountries'),
+		best: 0 || Number(getItemFromLocal('bestTotalUniqueVisits')),
 		current: visitedCountries.length
 	});
 	const totalRounds = Object.keys(countryFlagsJson).length;
@@ -32,7 +32,6 @@ function App() {
 				country: country[1]
 			}));
 	}
-
 	// const resetStates = () => {
 	// 	setCountries(jsonToArr(countryFlagsJson));
 	// 	setVisitedCountries([]);
@@ -70,21 +69,22 @@ function App() {
 	}
 
 	const updateVisitedCountries = (latestVisitedCountryArr) => {
-		const newVisitedCountriesArr =
+		const newVisitedCountriesArr = (visitedCountries) =>
 			visitedCountries.concat(latestVisitedCountryArr);
-		setVisitedCountries(visitedCountries => ({
-			...visitedCountries, newVisitedCountriesArr
-		}));
+		setVisitedCountries(visitedCountries =>
+			newVisitedCountriesArr(visitedCountries)
+		);
 	}
 
 	const countryStatusToVisited = (flagData) => {
 		const { code } = flagData;
-		const newUnvisitedCountries = countries.filter((flags) => {
+		const newUnvisitedCountries = (countries) => countries.filter((flags) => {
 			return flags.code !== code;
 		});
-		setCountries(countries => ({ ...countries, newUnvisitedCountries }));
+		setCountries(countries => newUnvisitedCountries(countries));
 		updateVisitedCountries(flagData);
 	}
+
 	// extract json to create an array with flag objects
 	useEffect(() => {
 		const countryFlags = jsonToArr(countryFlagsJson);
@@ -92,23 +92,22 @@ function App() {
 	}, []);
 
 	useEffect(() => {
-		const { best, current } = totalUniqueVisits;
-		
+		const { best } = totalUniqueVisits;
+
 		const updateBestTotalUniqueVisits = (currentTotalUniqueVisits) => {
 			updateLocalStorage(
 				'bestTotalUniqueVisits',
 				currentTotalUniqueVisits
 			);
-			updateBestScore(currentTotalUniqueVisits);
-			setScore(totalUniqueVisits => ({
+			setTotalUniqueVisits(totalUniqueVisits => ({
 				...totalUniqueVisits,
 				best: currentTotalUniqueVisits,
 				current: currentTotalUniqueVisits
 			}));
 		}
-
+		console.log(best, visitedCountries.length);
 		if (best < visitedCountries.length) {
-			updateBestTotalUniqueVisits(current);
+			updateBestTotalUniqueVisits(visitedCountries.length);
 		} else {
 			setTotalUniqueVisits(totalUniqueVisits => ({
 				...totalUniqueVisits,

@@ -1,0 +1,36 @@
+.stat-wrapper {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	height: 100%;
+	font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI';
+	margin-right: 12px;
+}
+
+.stat__subject {
+	font-size: clamp(.8rem, 1vw, 1.8rem);
+	font-weight: 400;
+}
+
+.stat-data-wrapper {
+	display: grid;
+	grid-auto-flow: column;
+}
+
+.stat-data-wrapper > div {
+	border-right: 1px solid palevioletred;
+}
+
+.stat-data__label {
+	font-size: clamp(10px, .9vw, 1.6rem);
+	font-weight: 300;
+}
+
+.stat-data__num {
+	font-weight: 500;
+}
+
+.stat-data-wrapper dt, .stat-data-wrapper dd {
+	padding: 2px 7px;
+}

@@ -1,13 +1,21 @@
 import './styles.css';
 
-export default function Progress() {
+export default function Progress(props) {
+	const { totalUniqueVisits, totalRounds } = props;
+	const { current } = totalUniqueVisits;
+	const roundedUniqueVisitsPercentage =
+		`${Math.floor((current / totalRounds) * 100)}%`
 	return (
 		<div className='progress-bar'>
-			<div className='progress-bar__percentage'></div>
-			<div className='progress-bar__overlay'></div>
-			{/* <img 
-			className='progress_bg-img' 
-			/> */}
+			<div
+				className='progress-bar__background'
+				style={{ width: roundedUniqueVisitsPercentage }}
+			>
+			</div>
+			<div className='progress-bar__overlay'>
+				{`${roundedUniqueVisitsPercentage}(
+					${current}/${totalRounds})`}
+			</div>
 		</div>
 	)
 }

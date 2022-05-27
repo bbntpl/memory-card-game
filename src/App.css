@@ -1,8 +1,9 @@
 .App {
 	display: grid;
-	grid-template-rows: 100px auto 40px;
+	grid-template-rows: max(auto, 100px) auto 40px;
 	text-align: center;
 	width: 100%;
+	max-width: 100%;
 	max-height: max-content;
 	height: 100vh;
 	background-color: azure;
