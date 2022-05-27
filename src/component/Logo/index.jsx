@@ -1,7 +1,7 @@
 import ShieldAirplane from '../../assets/icons/shield-airplane.svg';
 import './styles.css';
 
-export default function Logo() {
+export default function Logo({ toggleSlogan = true }) {
 	const logoTitle = 'CFMC';
 	const sloganTxt = 'Travel each country without landing on visited countries'
 	return (
@@ -14,7 +14,10 @@ export default function Logo() {
 				/>
 				<h1 className='logo-title'>{logoTitle}</h1>
 			</div>
-			<p className='logo-slogan'>{sloganTxt}</p>
+			{
+				toggleSlogan &&
+				<p className='logo-slogan'>{sloganTxt}</p>
+			}
 		</div>
 	)
 }

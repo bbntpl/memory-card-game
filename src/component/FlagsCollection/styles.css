@@ -1,6 +1,7 @@
 .spinner{
 	width: 140px;
 	height: 140px;
+	justify-self: center;
 }
 
 .flags-container {

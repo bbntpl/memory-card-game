@@ -109,7 +109,6 @@ export default function FlagsCollection(props) {
 			numOfItems: numOfVisitedCountries,
 			array: visitedCountries
 		});
-		console.log(minRandomNumber, maxRandomNumber, numOfCountries, numOfVisitedCountries, currentLevel);
 		return shuffleArray(countriesFlags.concat(visitedCountriesFlags));
 	}
 
@@ -122,22 +121,30 @@ export default function FlagsCollection(props) {
 	// accumulated rounds to confirm whether the memory 
 	// game must advance to the next level
 	useEffect(() => {
-		const round = totalUniqueVisits.current + 1;
+		const currentRound = totalUniqueVisits.current + 1;
 		
 		// accumulated rounds from first level to the current level
-		const totalRoundsByCurrentLevel = (currentLevel) => {
+		const getLevelAndRoundsByCurrentRound = (currentRound) => {
 			return Object.values(levelComposition)
-				.reduce((accumulatedRounds, levelObj, level) => {
-					if (currentLevel >= level + 1) {
-						return accumulatedRounds += levelObj.totalRounds;
+				.reduce((accumulatedData, levelObj, index) => {
+					const { totalRounds } = levelObj;
+					const { level, rounds } = accumulatedData;
+					if (currentRound > rounds) {
+						return  {
+							level: level + 1,
+							rounds: rounds + totalRounds
+						}
 					}
-					return accumulatedRounds;
-				}, 0);
+					return accumulatedData;
+				}, { level: 0, rounds: 0});
 		}
-		if (totalRoundsByCurrentLevel(currentLevel) < round) {
-			setCurrentLevel(currentLevel => currentLevel + 1);
+		const { level, rounds } = getLevelAndRoundsByCurrentRound(currentRound);
+		console.log(level, rounds);
+		if (rounds >= currentRound) {
+			setCurrentLevel(level);
 		}
 	}, [totalUniqueVisits.current]);
+
 	return (
 		<div className='flags-container'>
 			{

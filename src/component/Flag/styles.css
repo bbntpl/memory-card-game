@@ -7,6 +7,7 @@
 	border: 5px solid transparent; 
 	font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI';
 }
+
 @media screen and (max-width: 765px) {
 	.country-card {
 		width: 150px;
@@ -18,6 +19,7 @@
 		border: 4px solid lightcoral;
 	}
 }
+
 @media screen and (max-width: 420px) {
 	.country-card {
 		width: 80px;
@@ -29,6 +31,7 @@
 		border: 2px solid lightcoral;
 	}
 }
+
 .country-card:hover {
 	border: 5px solid lightcoral;
 	cursor: pointer; 

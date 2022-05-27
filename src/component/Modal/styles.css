@@ -1,0 +1,71 @@
+.screen-overlay {
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	background-color: rgba(0, 0, 0, 0.2);
+	z-index: 3000;
+}
+
+.restart-modal {
+	background-color: rgb(248, 236, 245);
+	border: 3px solid palevioletred;
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	-webkit-transform: translate(-50%, -80%);
+	transform: translate(-50%, -80%);
+	padding: .9rem;
+	min-width: 200px;
+	width: fit-content;
+	max-width: 1000px;
+	max-height: max-content;
+	font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI';
+}
+
+.restart-modal > .logo {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.primary-msg {
+	margin: 1rem;
+	color: rgb(49, 49, 49);
+	max-width: max-content;
+}
+.restart-modal__stats {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	margin: 1rem 1.8rem;
+	gap: 2rem;
+	align-items: flex-end;
+}
+
+.restart-modal__stats dt {
+	width: min-content;
+	margin: 4px 0;
+	font-weight: 500;
+}
+
+.restart-modal__stats dd {
+	font-size: 1.5rem;
+	font-weight: 200;
+}
+
+.restart-modal__button {
+	height: max-content;
+	padding: 2px 8px;
+	border: 2px solid rgb(228, 156, 180);
+	cursor: pointer;
+	color: palevioletred;
+	font-weight: 500;
+	font-size: 1.2rem;
+}
+
+.restart-modal__button:hover {
+	border-color: palevioletred;
+}
+
+.restart-modal>*>* {
+	justify-content: center;
+}

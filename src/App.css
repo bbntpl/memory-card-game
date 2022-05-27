@@ -15,6 +15,10 @@
 	box-sizing: border-box;
 }
 
+.footer {
+	padding: 2rem 0;
+}
+
 .footer>a {
 	font-weight: 200;
 }

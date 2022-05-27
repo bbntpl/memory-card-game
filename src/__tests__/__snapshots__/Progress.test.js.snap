@@ -1,0 +1,64 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`progress bar width must be the calculation from two variables 1`] = `
+<div
+  className="progress-bar"
+>
+  <div
+    className="progress-bar__background"
+    style={
+      Object {
+        "width": "10%",
+      }
+    }
+  />
+  <div
+    className="progress-bar__overlay"
+  >
+    10%(
+					4/40)
+  </div>
+</div>
+`;
+
+exports[`progress bar width must be the calculation from two variables 2`] = `
+<div
+  className="progress-bar"
+>
+  <div
+    className="progress-bar__background"
+    style={
+      Object {
+        "width": "50%",
+      }
+    }
+  />
+  <div
+    className="progress-bar__overlay"
+  >
+    50%(
+					20/40)
+  </div>
+</div>
+`;
+
+exports[`progress bar width must be the calculation from two variables 3`] = `
+<div
+  className="progress-bar"
+>
+  <div
+    className="progress-bar__background"
+    style={
+      Object {
+        "width": "100%",
+      }
+    }
+  />
+  <div
+    className="progress-bar__overlay"
+  >
+    100%(
+					40/40)
+  </div>
+</div>
+`;
