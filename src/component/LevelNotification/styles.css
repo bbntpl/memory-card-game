@@ -1,0 +1,41 @@
+.card-notif--visible {
+	background-color: rgba(39, 39, 39, 0.842);
+	position: fixed;
+	bottom: 0;
+	right: 0;
+	color: aliceblue;
+	height: max-content;
+	width: max-content;
+	max-width: 500px;
+	border-radius: .7rem;
+	-webkit-transition: all 1.2s ease-in;
+	-moz-transition: all 1.2s ease-in;
+	-o-transition: all 1.2s ease-in;
+	transition: all 1.2s ease-in;
+	margin: 2vw;
+	opacity: 0;
+	cursor: pointer;
+	padding: 10px 5px;
+}
+
+[class$='--invisible'] {
+	opacity: 0;
+	transform: translateY(-30);
+}
+
+[class$='--visible'] {
+	opacity: 1;
+	transform: translateY(0);
+}
+
+.card-notif__header {
+	font-family: 'Titillium Web', 'Plus Jakarta Sans'sans-serif;
+	font-weight: 600;
+	font-size: 2rem;
+}
+
+.card-notif__datalist {
+	display: inline-flex;
+	margin: 4px 1rem;
+	font-family: 'Plus Jakarta Sans', 'Titillium Web', sans-serif;
+}

@@ -1,17 +1,32 @@
 import { useCallback, useEffect, useState } from 'react';
 
 
-export default function useTimedComponent(seconds = 5) {
-	const [isTimerRunning, setTimer] = useState(false);
-	const stopTimer = useCallback(() => setTimer(false), []);
+export default function useTimer(milliseconds = 5000) {
+	const [state, setState] = useState({
+		timer: null,
+		isTimerRunning: false
+	});
+	const isTimerRunning = state.isTimerRunning;
+	const setTimer = useCallback((initialToggle) => {
+		setState(state => ({ ...state, isTimerRunning: initialToggle || false }))
+	}, []);
 
 	useEffect(() => {
-		if(isTimerRunning) {
-			setTimeout(() => {
-				stopTimer()
-			}, (seconds * 1000));
+		const { timer } = state;
+		if (isTimerRunning && timer) {
+			window.clearTimeout(timer);
+			setState(state => ({ ...state, timeout: null }));
 		}
-	}, [timer]);
+		if (isTimerRunning) {
+			const timer = setTimeout(() => {
+				setTimer();
+			}, milliseconds);
+			setState(state => ({ ...state, timeout: timer }));
+			return () => {
+				clearTimeout(timer);
+			};
+		}
+	}, [state.isTimerRunning]);
 
 	return [isTimerRunning, setTimer];
 }
