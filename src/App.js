@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import {
 	getItemFromLocal,
 	updateLocalStorage
@@ -8,7 +8,7 @@ import './App.css';
 //components
 import Header from './component/Header';
 import Main from './component/Main';
-import RestartModal from './component/Modal';
+import Modal from './component/Modal';
 
 import countryFlagsJson from './data/ISO3166-1.alpha2.json';
 
@@ -53,30 +53,30 @@ function App() {
 		});
 	}
 
-	const updateCurrentScore = (scoreGainedInARound) => {
+	const modifyCurrentScore = (scoreGainedInARound) => {
 		setScore(score => ({
 			...score,
 			current: score.current + scoreGainedInARound
 		}));
 	}
 
-	const updateBestScore = (bestScore) => {
+	const modifyBestScore = (bestScore) => {
 		setScore(score => ({ ...score, best: bestScore }));
 	}
 
-	const updateScores = (scoreGainedInARound) => {
+	const modifyScores = (scoreGainedInARound) => {
 		const { best, current } = score;
-		const updatedScore = current + scoreGainedInARound;
-		if (best < updatedScore) {
-			updateLocalStorage('bestScore', current);
-			updateBestScore(updatedScore);
-			updateCurrentScore(scoreGainedInARound)
+		const modifiedScore = current + scoreGainedInARound;
+		if (best < modifiedScore) {
+			updateLocalStorage('bestScore', modifiedScore);
+			modifyBestScore(modifiedScore);
+			modifyCurrentScore(scoreGainedInARound);
 			return;
 		}
-		updateCurrentScore(scoreGainedInARound);
+		modifyCurrentScore(scoreGainedInARound);
 	}
 
-	const updateVisitedCountries = (latestVisitedCountryArr) => {
+	const modifyVisitedCountries = (latestVisitedCountryArr) => {
 		const newVisitedCountriesArr = (visitedCountries) =>
 			visitedCountries.concat(latestVisitedCountryArr);
 		setVisitedCountries(visitedCountries =>
@@ -87,17 +87,20 @@ function App() {
 	const countryStatusToVisited = (flagData) => {
 		const { code } = flagData;
 
+		// check whether the chosen country was visited before
+		// then reset every states to restart the memory game
+		const checkIfCountryWasVisited = isCountryRevisited(code);
+		if (checkIfCountryWasVisited) {
+			toggleRestartModal();
+			return checkIfCountryWasVisited;
+		} 
+
+		// otherwise move the chosen country to the visited countires array
 		const newUnvisitedCountries = (countries) => countries.filter((flags) => {
 			return flags.code !== code;
 		});
 		setCountries(countries => newUnvisitedCountries(countries));
-		updateVisitedCountries(flagData);
-
-		// check whether the chose country was visited before
-		// then reset every states to restart the memory game
-		if (isCountryRevisited(code)) {
-			toggleRestartModal();
-		}
+		modifyVisitedCountries(flagData);
 	}
 
 	const isCountryRevisited = (code) => {
@@ -122,7 +125,7 @@ function App() {
 	useEffect(() => {
 		const { best } = totalUniqueVisits;
 
-		const updateBestTotalUniqueVisits = (currentTotalUniqueVisits) => {
+		const modifyBestTotalUniqueVisits = (currentTotalUniqueVisits) => {
 			updateLocalStorage(
 				'bestTotalUniqueVisits',
 				currentTotalUniqueVisits
@@ -135,7 +138,7 @@ function App() {
 		}
 
 		if (best < visitedCountries.length) {
-			updateBestTotalUniqueVisits(visitedCountries.length);
+			modifyBestTotalUniqueVisits(visitedCountries.length);
 			return;
 		}
 		
@@ -146,8 +149,9 @@ function App() {
 	}, [visitedCountries]);
 
 	const mainComponentProps = {
-		updateScores,
+		modifyScores,
 		countryStatusToVisited,
+		isCountryRevisited,
 		countries,
 		visitedCountries,
 		totalRounds: TOTAL_ROUNDS,
@@ -163,13 +167,13 @@ function App() {
 			/>
 			<Main {...mainComponentProps} />
 			{(!isGameStart && totalUniqueVisits.current !== TOTAL_ROUNDS)
-				&& <RestartModal
+				&& <Modal
 					score={score}
 					totalUniqueVisits={totalUniqueVisits}
 					toggleRestartModal={toggleRestartModal}
 				/>}
 			{(!isGameStart && totalUniqueVisits.current === TOTAL_ROUNDS)
-				&& <RestartModal
+				&& <Modal
 					primaryMessage={CONGRATS_MSG}
 					toggleRestartModal={toggleRestartModal}
 				/>}
