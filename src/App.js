@@ -138,7 +138,7 @@ function App() {
 			updateBestTotalUniqueVisits(visitedCountries.length);
 			return;
 		}
-		console.log(visitedCountries.length);
+		
 		setTotalUniqueVisits(totalUniqueVisits => ({
 			...totalUniqueVisits,
 			current: visitedCountries.length
@@ -147,12 +147,12 @@ function App() {
 
 	const mainComponentProps = {
 		updateScores,
-		updateVisitedCountries,
 		countryStatusToVisited,
 		countries,
 		visitedCountries,
 		totalRounds: TOTAL_ROUNDS,
-		totalUniqueVisits
+		totalUniqueVisits,
+		isGameStart
 	};
 
 	return (
