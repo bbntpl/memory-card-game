@@ -10,7 +10,7 @@ const MemoizedStat = ({ label, value }) => useMemo(() => {
 		</dl>
 	)
 }, [])
-export default function RestartModal(props) {
+export default function Modal(props) {
 	const {
 		score,
 		totalUniqueVisits,

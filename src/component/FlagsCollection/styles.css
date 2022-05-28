@@ -14,9 +14,10 @@
 	padding: 1rem .5rem;
 }
 
-@media screen and (max-width: 420px) {
+@media screen and (max-width: 760px) {
 	.flags-container {
 		gap: .5rem;
 		padding: .5rem .2rem;
+		grid-template-columns: repeat(3, 1fr);
 	}
 }

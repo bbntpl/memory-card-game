@@ -5,12 +5,14 @@ import LevelNotification from '../LevelNotification';
 import levelComposition from '../../data/level-composition.json';
 import Spinner from '../../assets/icons/Spinner-1s-200px.gif';
 import './styles.css';
+import useStopwatch from '../../hooks/useStopwatch';
 
 function RenderFlags(props) {
 	const {
 		flags,
 		getFlagImage,
 		countryStatusToVisited,
+		endRound
 	} = props
 	return [...flags].map((flag, i) => {
 		const { code } = flag;
@@ -20,6 +22,7 @@ function RenderFlags(props) {
 			flagImage={flagSvg}
 			flagData={flag}
 			countryStatusToVisited={countryStatusToVisited}
+			endRound={endRound}
 		/>
 	});
 }
@@ -30,13 +33,16 @@ export default function FlagsCollection(props) {
 		countries,
 		visitedCountries,
 		countryStatusToVisited,
-		isGameStart
+		isGameStart,
+		modifyScores
 	} = props;
 	const [currentLevel, setCurrentLevel] = useState(1);
 	const [flagsForCurrentRound, setFlagsForCurrentRound] = useState([]);
 	const [isTimerRunning, setTimer] = useTimer(5000);
+	const [time, toggleStopWatch] = useStopwatch();
 
 	const stopTimer = useCallback(() => setTimer(), []);
+
 	const TOTAL_LEVELS = Object.keys(levelComposition).length;
 	const levelNotificationProps = useMemo(() => {
 		const {
@@ -52,7 +58,6 @@ export default function FlagsCollection(props) {
 						const visitedCountries = totalFlags - numOfCountries;
 						const unroundedLvlDiff = (visitedCountries / totalFlags) * 100;
 						const roundedLvlDiff = Math.round(unroundedLvlDiff);
-						console.log(roundedLvlDiff);
 						return roundedLvlDiff;
 					});
 			}
@@ -146,6 +151,24 @@ export default function FlagsCollection(props) {
 		return shuffleArray(countriesFlags.concat(visitedCountriesFlags));
 	}
 
+	const calculateRoundScore = (time) => {
+		const { scoreMultiplier } = levelComposition[String(currentLevel)];
+		const maxMilliseconds = 10000;
+		const round = visitedCountries.length + 1;
+		const scoreReduction = (maxMilliseconds - time) / maxMilliseconds;
+		const defaultScorePerRound = round * 10;
+		return Math.round((defaultScorePerRound * scoreReduction) * scoreMultiplier);
+	}
+
+	const restartStopWatch = () => {
+		toggleStopWatch(false, true);
+		toggleStopWatch(true, false);
+	}
+
+	const endRound = () => {
+		restartStopWatch();
+		modifyScores(calculateRoundScore(time));
+	}
 	useEffect(() => {
 		const flags = displayFlags();
 		setFlagsForCurrentRound(flags);
@@ -176,11 +199,16 @@ export default function FlagsCollection(props) {
 
 		// switch to the next level when the current round 
 		// surpasses the rounds for the current level
-		if (rounds <= currentRound) return;
+		if (rounds < currentRound) return;
 		setCurrentLevel(level);
 	}, [totalUniqueVisits.current]);
 
+	// start the timer once a new level or game started
 	useEffect(() => setTimer(true), [currentLevel, isGameStart]);
+
+	useEffect(() => {
+		toggleStopWatch(isGameStart ? 1 : 0);
+	}, [isGameStart]);
 
 	return (
 		<div className='flags-container'>
@@ -192,6 +220,7 @@ export default function FlagsCollection(props) {
 						flags={flagsForCurrentRound}
 						getFlagImage={getFlagImage}
 						countryStatusToVisited={countryStatusToVisited}
+						endRound={endRound}
 					/> :
 					<img src={Spinner} alt='spinner' className='spinner' />
 			}
