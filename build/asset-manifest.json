@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/memory-card-game/static/css/main.5b866224.css",
+    "main.js": "/memory-card-game/static/js/main.64192a12.js",
+    "static/media/Spinner-1s-200px.gif": "/memory-card-game/static/media/Spinner-1s-200px.01dafa493122a3dcda4e.gif",
+    "index.html": "/memory-card-game/index.html",
+    "static/media/shield-airplane.svg": "/memory-card-game/static/media/shield-airplane.e044bfcaa2c194e58a84d765a9664e5c.svg",
+    "main.5b866224.css.map": "/memory-card-game/static/css/main.5b866224.css.map",
+    "main.64192a12.js.map": "/memory-card-game/static/js/main.64192a12.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.5b866224.css",
+    "static/js/main.64192a12.js"
+  ]
+}
