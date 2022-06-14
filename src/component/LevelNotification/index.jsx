@@ -26,12 +26,12 @@ export default function LevelNotification(props) {
 				<dd>{scoreMultiplier}x</dd>
 			</dl>
 			<dl className='card-notif__datalist'>
-				<dt>Difficulty: </dt>
+				<dt>Difficulty:</dt>
 				<dd>
 					{
 						Array.isArray(difficultyRange)
-							? `${difficultyRange[1]}% - ${difficultyRange[0]}%`
-							: `${difficultyRange}%`
+							? ` ${difficultyRange[1]}% - ${difficultyRange[0]}%`
+							: ` ${difficultyRange}%`
 					}
 				</dd>
 			</dl>

@@ -23,7 +23,8 @@ export default function useStopwatch(maxMilliseconds = 10000) {
 			clearInterval(interval);
 		};
 	}, [isActive]);
-	console.log(time);
+
+	// stop stopwatch when the condition is met
 	useEffect(() => {
 		if (time >= maxMilliseconds) {
 			toggleStopwatch(false);

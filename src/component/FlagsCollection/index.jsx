@@ -46,6 +46,7 @@ export default function FlagsCollection(props) {
 	const [isTimerRunning, setTimer] = useTimer(5000);
 	const [time, toggleStopWatch] = useStopwatch();
 
+	const FLAGS_QTY = 245;
 	const stopTimer = useCallback(() => setTimer(), [setTimer]);
 
 	const levelNotificationProps = useMemo(() => {
@@ -55,18 +56,52 @@ export default function FlagsCollection(props) {
 			unvisitedCountries,
 			totalFlags
 		} = levelComposition[String(currentLevel)];
+
+		const getAverage = (operands) => {
+			const sum = operands.reduce((sum, num) => sum += num, 0);
+			return Math.round((sum / (operands.length * 100) * 100));
+		}
+
+		const arrayLevelComposition = () => {
+			let result = [];
+			// convert json object to array of objects
+			Object.keys(levelComposition).forEach(k => {
+				const obj = {};
+				Object.keys(levelComposition[k]).forEach(v => {
+					obj[v] = levelComposition[k][v];
+				});
+				result.push(obj);
+			});
+			return result;
+		}
+
+		const calculateLevelDifficulty = (unvisitedCountries) => {
+			const getMaxFlagsInALevel = arrayLevelComposition().reduce((prev, current) => {
+				return (prev.totalFlags > current.totalFlags) ? prev : current
+			}).totalFlags;
+
+			// operands for calculating difficulty
+			const visitedCountriesPercentage = visitedCountries.length / FLAGS_QTY;
+			const visitedCountriesOperand = Math.round(visitedCountriesPercentage * 100);
+			console.log(visitedCountriesOperand, visitedCountries.length, FLAGS_QTY);
+			const totalFlagsDividedByMaxFlags = totalFlags / getMaxFlagsInALevel;
+			const totalFlagsOperand = Math.round(totalFlagsDividedByMaxFlags * 100);
+
+			const visitedCountriesInALevel = totalFlags - unvisitedCountries;
+			const visitedCountriesInALevelOperand = Math.round((visitedCountriesInALevel / totalFlags) * 100);
+
+			return getAverage([
+				visitedCountriesOperand, 
+				totalFlagsOperand, 
+				visitedCountriesInALevelOperand
+			]);
+		}
 		const getLevelDifficulty = (unvisitedCountries) => {
 			if (Array.isArray(unvisitedCountries)) {
 				return Array.from({ length: unvisitedCountries.length },
-					(_, index) => {
-						const numOfCountries = unvisitedCountries[index];
-						const visitedCountries = totalFlags - numOfCountries;
-						const unroundedLvlDiff = (visitedCountries / totalFlags) * 100;
-						const roundedLvlDiff = Math.round(unroundedLvlDiff);
-						return roundedLvlDiff;
-					});
+					(_, index) => calculateLevelDifficulty(unvisitedCountries[index]));
 			}
-			return unvisitedCountries;
+			return calculateLevelDifficulty(unvisitedCountries);
 		}
 		return {
 			currentLevel,
