@@ -1,18 +1,20 @@
 import { useCallback, useEffect, useState, useMemo } from 'react';
 import useTimer from '../../hooks/useTimer';
-import Flag from '../Flag';
-import LevelNotification from '../LevelNotification';
+import useStopwatch from '../../hooks/useStopwatch';
 import levelComposition from '../../data/level-composition.json';
 import Spinner from '../../assets/icons/Spinner-1s-200px.gif';
 import './styles.css';
-import useStopwatch from '../../hooks/useStopwatch';
 
+import Flag from '../Flag';
+import LevelNotification from '../LevelNotification';
 function RenderFlags(props) {
 	const {
 		flags,
 		getFlagImage,
-		countryStatusToVisited,
-		endRound
+		handleVisitCountry,
+		endRound,
+		isCountryRevisited,
+		toggleRestartModal
 	} = props
 	return [...flags].map((flag, i) => {
 		const { code } = flag;
@@ -21,8 +23,10 @@ function RenderFlags(props) {
 			key={`${i}--code`}
 			flagImage={flagSvg}
 			flagData={flag}
-			countryStatusToVisited={countryStatusToVisited}
+			handleVisitCountry={handleVisitCountry}
 			endRound={endRound}
+			isCountryRevisited={isCountryRevisited}
+			toggleRestartModal={toggleRestartModal}
 		/>
 	});
 }
@@ -32,19 +36,20 @@ export default function FlagsCollection(props) {
 		totalUniqueVisits,
 		countries,
 		visitedCountries,
-		countryStatusToVisited,
+		handleVisitCountry,
 		isGameStart,
-		modifyScores
+		modifyScores,
+		toggleRestartModal
 	} = props;
 	const [currentLevel, setCurrentLevel] = useState(1);
 	const [flagsForCurrentRound, setFlagsForCurrentRound] = useState([]);
 	const [isTimerRunning, setTimer] = useTimer(5000);
 	const [time, toggleStopWatch] = useStopwatch();
 
-	const stopTimer = useCallback(() => setTimer(), []);
+	const stopTimer = useCallback(() => setTimer(), [setTimer]);
 
-	const TOTAL_LEVELS = Object.keys(levelComposition).length;
 	const levelNotificationProps = useMemo(() => {
+		const TOTAL_LEVELS = Object.keys(levelComposition).length;
 		const {
 			scoreMultiplier,
 			unvisitedCountries,
@@ -70,6 +75,10 @@ export default function FlagsCollection(props) {
 			difficultyRange: getLevelDifficulty(unvisitedCountries)
 		}
 	}, [currentLevel]);
+
+	const isCountryRevisited = (code) => {
+		return visitedCountries.some(flag => flag.code === code);
+	}
 
 	function getFlagImage({ fileType = 'svg', code }) {
 		return `https://countryflagsapi.com/${fileType}/${code}`;
@@ -97,9 +106,9 @@ export default function FlagsCollection(props) {
 	}
 
 	function maxNumOfCountries(props) {
-		const { numOfUnvisitedCountries, minNumOfCountires } = props;
-		if (minNumOfCountires > numOfUnvisitedCountries) {
-			return minNumOfCountires;
+		const { numOfUnvisitedCountries, minNumOfCountries } = props;
+		if (minNumOfCountries > numOfUnvisitedCountries) {
+			return minNumOfCountries;
 		} else {
 			return numOfUnvisitedCountries;
 		}
@@ -117,39 +126,6 @@ export default function FlagsCollection(props) {
 	}
 
 	const shuffleArray = (originalArr) => [...originalArr].sort(() => 0.5 - Math.random());
-
-	// pick random flags from both (un)visited countries
-	// to be displayed for the user to choose on
-	function displayFlags() {
-		const currentLvlObj = levelComposition[String(currentLevel)];
-		const { totalFlags, unvisitedCountries } = currentLvlObj;
-		const visitedCountriesLen = visitedCountries.length;
-		const minRandomNumber = minNumOfCountries({
-			totalFlags,
-			numOfUnvisitedCountries: unvisitedCountries[0] || unvisitedCountries,
-			numOfVisitedCountries: visitedCountriesLen
-		});
-		const maxRandomNumber = maxNumOfCountries({
-			numOfUnvisitedCountries: unvisitedCountries[1],
-			minNumOfCountries: minRandomNumber
-		});
-
-		// get the number of unvisited countries between
-		// the available min/max range 
-		const numOfCountries = Array.isArray(unvisitedCountries)
-			? randomNumber(minRandomNumber, maxRandomNumber)
-			: unvisitedCountries;
-		const numOfVisitedCountries = totalFlags - numOfCountries;
-		const countriesFlags = collectItemsFromArray({
-			numOfItems: numOfCountries,
-			array: countries
-		});
-		const visitedCountriesFlags = collectItemsFromArray({
-			numOfItems: numOfVisitedCountries,
-			array: visitedCountries
-		});
-		return shuffleArray(countriesFlags.concat(visitedCountriesFlags));
-	}
 
 	const calculateRoundScore = (time) => {
 		const { scoreMultiplier } = levelComposition[String(currentLevel)];
@@ -169,10 +145,44 @@ export default function FlagsCollection(props) {
 		restartStopWatch();
 		modifyScores(calculateRoundScore(time));
 	}
+
 	useEffect(() => {
+		// pick random flags from both (un)visited countries
+		// to be displayed for the user to choose on
+		function displayFlags() {
+			const currentLvlObj = levelComposition[String(currentLevel)];
+			const { totalFlags, unvisitedCountries } = currentLvlObj;
+			const visitedCountriesLen = visitedCountries.length;
+			const minRandomNumber = minNumOfCountries({
+				totalFlags,
+				numOfUnvisitedCountries: unvisitedCountries[0] || unvisitedCountries,
+				numOfVisitedCountries: visitedCountriesLen
+			});
+			const maxRandomNumber = maxNumOfCountries({
+				numOfUnvisitedCountries: unvisitedCountries[1],
+				minNumOfCountries: minRandomNumber
+			});
+
+			// get the number of unvisited countries between
+			// the available min/max range 
+			const numOfCountries = Array.isArray(unvisitedCountries)
+				? randomNumber(minRandomNumber, maxRandomNumber)
+				: unvisitedCountries;
+			const numOfVisitedCountries = totalFlags - numOfCountries;
+			const countriesFlags = collectItemsFromArray({
+				numOfItems: numOfCountries,
+				array: countries
+			});
+			const visitedCountriesFlags = collectItemsFromArray({
+				numOfItems: numOfVisitedCountries,
+				array: visitedCountries
+			});
+			return shuffleArray(countriesFlags.concat(visitedCountriesFlags));
+		}
+
 		const flags = displayFlags();
 		setFlagsForCurrentRound(flags);
-	}, [countries, visitedCountries]);
+	}, [countries, visitedCountries, currentLevel]);
 
 	// In every round, compare the level composition to the
 	// accumulated rounds to confirm whether the memory 
@@ -197,17 +207,18 @@ export default function FlagsCollection(props) {
 		}
 		const { level, rounds } = getLevelAndRoundsByCurrentRound(currentRound);
 
-		// switch to the next level when the current round 
-		// surpasses the rounds for the current level
-		if (rounds < currentRound) return;
-		setCurrentLevel(level);
-	}, [totalUniqueVisits.current]);
+		// switch to the next level when the total available rounds
+		// is larger than the current round
+		if (rounds > currentRound) {
+			setCurrentLevel(level);
+		};
+	}, [totalUniqueVisits]);
 
 	// start the timer once a new level or game started
 	useEffect(() => setTimer(true), [currentLevel, isGameStart]);
 
 	useEffect(() => {
-		toggleStopWatch(isGameStart ? 1 : 0);
+		toggleStopWatch(isGameStart);
 	}, [isGameStart]);
 
 	return (
@@ -219,8 +230,10 @@ export default function FlagsCollection(props) {
 					<RenderFlags
 						flags={flagsForCurrentRound}
 						getFlagImage={getFlagImage}
-						countryStatusToVisited={countryStatusToVisited}
+						handleVisitCountry={handleVisitCountry}
 						endRound={endRound}
+						isCountryRevisited={isCountryRevisited}
+						toggleRestartModal={toggleRestartModal}
 					/> :
 					<img src={Spinner} alt='spinner' className='spinner' />
 			}

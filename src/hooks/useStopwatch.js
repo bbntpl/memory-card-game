@@ -18,19 +18,17 @@ export default function useStopwatch(maxMilliseconds = 10000) {
 			interval = setInterval(() => {
 				setTime((time) => time + 10);
 			}, 10);
-		} else {
-			clearInterval(interval);
 		}
 		return () => {
 			clearInterval(interval);
 		};
 	}, [isActive]);
-
+	console.log(time);
 	useEffect(() => {
 		if (time >= maxMilliseconds) {
 			toggleStopwatch(false);
 		}
-	}, [time])
+	}, [time, maxMilliseconds, toggleStopwatch])
 
 	return [time, toggleStopwatch]
 }

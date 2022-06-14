@@ -15,18 +15,18 @@ export default function useTimer(milliseconds = 5000) {
 		const { timer } = state;
 		if (isTimerRunning && timer) {
 			window.clearTimeout(timer);
-			setState(state => ({ ...state, timeout: null }));
+			setState(state => ({ ...state, timer }));
 		}
 		if (isTimerRunning) {
 			const timer = setTimeout(() => {
 				setTimer();
 			}, milliseconds);
-			setState(state => ({ ...state, timeout: timer }));
+			setState(state => ({ ...state, timer }));
 			return () => {
 				clearTimeout(timer);
 			};
 		}
-	}, [state.isTimerRunning]);
+	}, [isTimerRunning]);
 
 	return [isTimerRunning, setTimer];
 }

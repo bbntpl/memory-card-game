@@ -1,7 +1,8 @@
+import { memo } from 'react';
 import ShieldAirplane from '../../assets/icons/shield-airplane.svg';
 import './styles.css';
 
-export default function Logo({ toggleSlogan = true }) {
+const Logo = memo(({ toggleSlogan = true }) => {
 	const logoTitle = 'CFMC';
 	const sloganTxt = 'Travel each country without landing on visited countries'
 	return (
@@ -20,4 +21,6 @@ export default function Logo({ toggleSlogan = true }) {
 			}
 		</div>
 	)
-}
+});
+
+export default Logo;

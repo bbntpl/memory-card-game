@@ -1,11 +1,11 @@
 {
 	"1": {
-		"totalFlags": 20,
+		"totalFlags": 4,
 		"unvisitedCountries": [
-			14,
-			20
+			2,
+			4
 		],
-		"totalRounds": 20,
+		"totalRounds": 3,
 		"scoreMultiplier": 1
 	},
 	"2": {

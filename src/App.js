@@ -40,18 +40,7 @@ function App() {
 				country: country[1]
 			}));
 	}
-	const resetStates = () => {
-		setCountries(jsonToArr(countryFlagsJson));
-		setVisitedCountries([]);
-		setScore({
-			best: getItemFromLocal('bestScore') || 0,
-			current: 0
-		});
-		setTotalUniqueVisits({
-			best: getItemFromLocal('bestTotalUniqueVisits') || 0,
-			current: 0
-		});
-	}
+
 
 	const modifyCurrentScore = (scoreGainedInARound) => {
 		setScore(score => ({
@@ -84,16 +73,12 @@ function App() {
 		);
 	}
 
-	const countryStatusToVisited = (flagData) => {
-		const { code } = flagData;
+	const toggleRestartModal = () => {
+		setIsGameStart(isGameStart => !isGameStart);
+	}
 
-		// check whether the chosen country was visited before
-		// then reset every states to restart the memory game
-		const checkIfCountryWasVisited = isCountryRevisited(code);
-		if (checkIfCountryWasVisited) {
-			toggleRestartModal();
-			return checkIfCountryWasVisited;
-		} 
+	const handleVisitCountry = (flagData) => {
+		const { code } = flagData;
 
 		// otherwise move the chosen country to the visited countires array
 		const newUnvisitedCountries = (countries) => countries.filter((flags) => {
@@ -101,15 +86,8 @@ function App() {
 		});
 		setCountries(countries => newUnvisitedCountries(countries));
 		modifyVisitedCountries(flagData);
-	}
+	};
 
-	const isCountryRevisited = (code) => {
-		return visitedCountries.some(flag => flag.code === code);
-	}
-
-	const toggleRestartModal = () => {
-		setIsGameStart(isGameStart => !isGameStart);
-	}
 
 	// extract json to create an array with flag objects
 	useEffect(() => {
@@ -117,9 +95,20 @@ function App() {
 		setCountries(countryFlags);
 	}, []);
 
+	// resetting states after game restart
 	useEffect(() => {
 		if (isGameStart) return;
-		resetStates();
+
+		setCountries(jsonToArr(countryFlagsJson));
+		setVisitedCountries([]);
+		setScore({
+			best: getItemFromLocal('bestScore') || 0,
+			current: 0
+		});
+		setTotalUniqueVisits({
+			best: getItemFromLocal('bestTotalUniqueVisits') || 0,
+			current: 0
+		});
 	}, [isGameStart])
 
 	useEffect(() => {
@@ -141,7 +130,7 @@ function App() {
 			modifyBestTotalUniqueVisits(visitedCountries.length);
 			return;
 		}
-		
+
 		setTotalUniqueVisits(totalUniqueVisits => ({
 			...totalUniqueVisits,
 			current: visitedCountries.length
@@ -150,8 +139,8 @@ function App() {
 
 	const mainComponentProps = {
 		modifyScores,
-		countryStatusToVisited,
-		isCountryRevisited,
+		handleVisitCountry,
+		toggleRestartModal,
 		countries,
 		visitedCountries,
 		totalRounds: TOTAL_ROUNDS,
