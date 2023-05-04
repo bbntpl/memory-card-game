@@ -9,12 +9,14 @@
 .restart-modal {
 	background-color: rgb(248, 236, 245);
 	border: 3px solid palevioletred;
+	border-radius: 10px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 	position: absolute;
 	left: 50%;
 	top: 50%;
 	-webkit-transform: translate(-50%, -80%);
 	transform: translate(-50%, -80%);
-	padding: .9rem;
+	padding: 1.5rem;
 	min-width: 200px;
 	width: fit-content;
 	max-width: 1000px;
@@ -32,6 +34,7 @@
 	color: rgb(49, 49, 49);
 	max-width: max-content;
 }
+
 .restart-modal__stats {
 	display: flex;
 	flex-direction: row;
@@ -54,16 +57,19 @@
 
 .restart-modal__button {
 	height: max-content;
-	padding: 2px 8px;
+	padding: 8px 16px;
 	border: 2px solid rgb(228, 156, 180);
+	border-radius: 5px;
 	cursor: pointer;
 	color: palevioletred;
 	font-weight: 500;
 	font-size: 1.2rem;
+	transition: all 0.3s ease;
 }
 
 .restart-modal__button:hover {
 	border-color: palevioletred;
+	background-color: rgba(219, 112, 147, 0.1);
 }
 
 .restart-modal>*>* {

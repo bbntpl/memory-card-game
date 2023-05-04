@@ -115,8 +115,8 @@ export default function FlagsCollection(props) {
 		return visitedCountries.some(flag => flag.code === code);
 	}
 
-	function getFlagImage({ fileType = 'svg', code }) {
-		return `https://countryflagsapi.com/${fileType}/${code}`;
+	function getFlagImage({ fileType = 'png', code }) {
+		return `https://flagsapi.com//${code}/shiny/64.${fileType}`;
 	}
 
 	function randomNumber(min, max) {
