@@ -2,7 +2,7 @@
 
 This website app is a simple memory game. The user's goal is to choose a country flag that hasn't been chosen before.
 
-Click [here](https://bvrbryn445.github.io/memory-card-game/) to access live demo.
+Click [here](https://bbntpl.github.io/memory-card-game/) to access live demo.
 
 ## API Used
 The country flags used in this game are sourced from [Flags API](https://flagsapi.com). This API provides high-quality flag images along with useful country-related information.

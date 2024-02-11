@@ -167,7 +167,7 @@ function App() {
 					toggleRestartModal={toggleRestartModal}
 				/>}
 			<footer className='footer'>
-				<a href='https://github.com/bvrbryn445'>
+				<a href='https://github.com/bbntpl'>
 					{`B.B. Antipolo ${CURRENT_YEAR}`}
 				</a>
 			</footer>
